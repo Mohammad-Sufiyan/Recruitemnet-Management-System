@@ -1,0 +1,104 @@
+{% extends "commonViews/layout.html" %}
+{% block body %}
+
+	<div class="first-widget parallax" id="contact">
+		<div class="parallax-overlay">
+			<div class="container pageTitle">
+				<div class="row">
+					<div class="col-md-6 col-sm-6">
+						<h2 class="page-title">Contact</h2>
+					</div> <!-- /.col-md-6 -->
+					<div class="col-md-6 col-sm-6 text-right">
+						<span class="page-location">Home / Contact</span>
+					</div> <!-- /.col-md-6 -->
+				</div> <!-- /.row -->
+			</div> <!-- /.container -->
+		</div> <!-- /.parallax-overlay -->
+	</div> <!-- /.pageTitle -->
+
+	<div class="container">	
+		<div class="row">
+
+			<div class="col-md-12 blog-posts">
+				
+				<div class="row">
+                    <div class="col-md-12">
+                        <div class="contact-form">
+                            <h3>Send a Direct Message</h3>
+	                        <div class="widget-inner">
+                            <form action="/contact" method="post" id="contact-form">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p>
+                                            <label for="name">Your Name:</label>
+                                            <input type="text" class="form-control" name="name" id="name">
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <label for="email">Email Address:</label>
+                                             <input type="text" class="form-control" name="email" id="email">
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <label for="subject">Subject:</label>
+                                             <input type="text" class="form-control" name="subject" id="subject">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>
+                                            <label for="message">Your message:</label>
+                                            <textarea class="form-control" name="message" id="message"></textarea>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="mainBtn" id="sendMessage" name="sendMessage" value="Send Message">Send Message</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                	<div class="col-md-12">
+                                		<div id="result"></div>
+                                	</div> <!-- /.col-md-12 -->
+                                </div> <!-- /.row -->
+                            </form>
+                          </div> <!-- /.widget-inner -->
+                        </div> <!-- /.contact-form -->
+                    </div> <!-- /.col-md-12 -->
+                </div> <!-- /.row -->
+			</div> <!-- /.col-md-8 -->
+
+		</div> <!-- /.row -->
+	</div> <!-- /.container -->	
+
+
+	<!-- Scripts -->
+	<script src="{{ url_for('static', filename='js/min/plugins.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/min/medigo-custom.min.js') }}"></script>
+	<script>
+        function initialize() {
+          var mapOptions = {
+            zoom: 14,
+            center: new google.maps.LatLng(13.758468, 100.567481)
+          };
+
+          var map = new google.maps.Map(document.getElementById('map-canvas'),
+              mapOptions);
+        }
+
+        function loadScript() {
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&' +
+              'callback=initialize';
+          document.body.appendChild(script);
+        }
+
+        window.onload = loadScript;
+    </script>
+
+{% endblock %}

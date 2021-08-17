@@ -1,0 +1,147 @@
+{% extends "commonViews/layout.html" %}
+{% block body %}
+
+							<!-- Modal -->
+							<div class="modal fade" id="myModal" role="dialog" style="text-align: center;">
+								<div class="modal-dialog">
+								
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Applying Job</h4>
+									</div>
+									<div class="modal-body">
+
+										<form action="/submit-applicant" method="POST" role="form" enctype="multipart/form-data">
+										<div class="form-group">
+											<label>Contact </label>
+											<input type="text" class="form-control" name="cont" id="cont" placeholder="Contact"/>
+										</div>
+										<div class="form-group">
+											<label>Upload Resume </label>
+											<input type="file" class="form-control" name="resume" id="resume" placeholder="Contact"/>
+										</div>
+										<div class="form-group" style="text-align: center;">
+										
+											<input type="submit" class="btn btn-primary form-control" name="resume" id="resume" />
+										</div>
+									</form>
+					
+									</div>
+									<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+								
+								</div>
+							</div>
+
+	<div class="container" >	
+		
+		<div class="row">
+		<div class="col-md-12 blog-posts">
+				<div class="row" >
+					<div class="col-md-12">
+						<div class="post-blog">
+							<hr><div class="blog-image">
+								{% set imgName='images/includes/'+jobDetails[0].img%}
+								<img src="{{ url_for('static', filename=imgName) }}" alt="">
+
+		
+							</div> <!-- /.blog-image -->
+
+							<div class="blog-content">
+								<h3>{{jobDetails[0].name_of_job}}</h3>
+								<h5>{{jobDetails[0].company_name}}</h5><br>
+								<div>
+								<a><i class="fa fa-map-marker" aria-hidden="true" style="font-size: 25px;"></i><span>  Location  	{{jobDetails[0].location}}</span></a>
+								</div><br>
+							
+								<div>
+									<table>
+										<thead>
+											<tr>
+									<th style="width: 20%;">
+									<a><i class="fa fa-play-circle-o" aria-hidden="true" style="font-size: 20px;"></i><span> Start Date</span></a>
+										</th>
+										<th style="width: 20%;">
+											<a><i class="fa fa-money" aria-hidden="true" style="font-size: 20px;"></i><span> CTC</span></a>
+												</th>
+												<th style="width: 20%;">
+													<a><i class="fa fa-hourglass-end" aria-hidden="true"  style="font-size: 20px;"></i><span> Apply by</span></a>
+														</th>
+													</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<td><span>&nbsp;&nbsp;&nbsp;&nbsp;{{jobDetails[0].start_date}}</span></td>
+											<td><span>&nbsp;&nbsp;&nbsp;&nbsp;{{jobDetails[0].CTC}}</span> </td>
+											<td><span>&nbsp;&nbsp;&nbsp;&nbsp;{{jobDetails[0].apply_by}}</span></td>
+										</tr>
+
+										</tbody>
+									
+									</table>
+									</div><br>
+									<div>
+										<a><i class="fa fa-users" aria-hidden="true" style="font-size: 25px;"></i><span> {{jobDetails[0].applicant}}  Applicant </span></a>
+										</div><br>
+										<div>
+											<span>{{jobDetails[0].experience}}</span>
+											</div>
+							<hr class="solid" style="  border-top: 2px solid #bbb;">
+							<div>
+								<label for="aboutJob" style="font-weight: bold;">About the job</label>
+								<blockquote>
+									{{jobDetails[0].about_the_job}}
+								</blockquote>
+							</div>
+					
+
+								
+								<div class="tag-items">
+                                    <label for="skill" style="font-weight: bold;">Skill(s) Required</label><br>
+									{% set skill=jobDetails[0].skill_required.split(',') %}
+									{%for i in range(0, skill|length)%} 
+                                    <span rel="tag">{{skill[i]}}</span>
+									{%endfor%}
+                                </div><br>
+								<div>
+									<label for="aboutJob" style="font-weight: bold;">Who can Apply</label>
+									<blockquote>
+										{{jobDetails[0].who_can_apply}}
+									</blockquote>
+								</div><br>
+								<div>
+									<label for="aboutJob" style="font-weight: bold;">Number of opening</label>
+									<blockquote>
+										{{jobDetails[0].num_of_opening}}									
+									</blockquote>
+								</div>
+								<div>
+								<form action="/sure" method="post" role="form">
+	
+                                    <div style="text-align: center;">
+										{% if userNameSess==None %}
+										<a  class="mainBtn" href="/user" style="text-decoration: none;"><span style="color: white;">Apply Now</span></a>
+
+										{%else %}
+										<button type="button" class="mainBtn" data-toggle="modal" data-target="#myModal" >Apply Now</button>
+
+										{% endif %}
+									</div>
+                           
+                                </form>
+							</div>
+
+							</div> <!-- /.blog-content -->
+							<!--  -->
+						</div> <!-- /.post-blog -->
+					</div> <!-- /.col-md-12 -->
+				</div> <!-- /.row -->
+				
+			
+			
+
+	{% endblock %}

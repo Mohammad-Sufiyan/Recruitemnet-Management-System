@@ -1,0 +1,182 @@
+{% extends "commonViews/layout.html" %}
+{% block body %}
+
+
+	<section id="homeIntro" class="parallax first-widget">
+	    <div class="parallax-overlay">
+		    <div class="container home-intro-content">
+		        <div class="row">
+		        	<div class="col-md-12">
+		        		<h2>You're here to hire. We're here to help.</h2>
+		        		<p>If you hire good people, give them good jobs, and pay them good wages, generally something good going to happen. </p>
+		        		<a href="#jobs" class="large-button white-color">Click here to get Job <i class="icon-button fa fa-download"></i></a>
+		        	</div> <!-- /.col-md-12 -->
+		        </div> <!-- /.row -->
+		    </div> <!-- /.container -->
+	    </div> <!-- /.parallax-overlay -->
+	</section> <!-- /#homeIntro -->
+
+	<section class="cta clearfix">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h4 class="cta-title"><strong>Want to use Medigo?</strong> You can apply for jobs</h4>
+				</div> <!-- /.col-md-12 -->
+			</div> <!-- /.row -->
+		</div> <!-- /.container -->
+	</section> <!-- /.cta -->
+
+	<section class="light-content services">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-md-4 col-sm-4">
+					<div class="service-box-wrap">
+						<div class="service-icon-wrap">
+							<i class="fa fa-laptop fa-2x"></i>
+						</div> <!-- /.service-icon-wrap -->
+						<div class="service-cnt-wrap">
+							<h3 class="service-title">Web development</h3>
+							<p>Web development is the building and maintenance of websites; it's the work that happens behind the scenes to make a website look great, work fast and perform well with a seamless user experience. Web developers, or 'devs', do this by using a variety of coding languages.</p>
+						</div> <!-- /.service-cnt-wrap -->
+					</div> <!-- /.service-box-wrap -->
+				</div> <!-- /.col-md-4 -->
+
+				<div class="col-md-4 col-sm-4">
+					<div class="service-box-wrap">
+						<div class="service-icon-wrap">
+							<i class="fa fa-mobile-phone fa-2x"></i>
+						</div> <!-- /.service-icon-wrap -->
+						<div class="service-cnt-wrap">
+							<h3 class="service-title">Mobile application</h3>
+							<p>Mobile developers are a type of software developer. They specialise in mobile technology such as building apps for Google's Android, Apple's iOS and Microsoft's Windows Phone platforms. ... Mobile developers learn the programming languages and software development environment for their chosen platform</p>
+						</div> <!-- /.service-cnt-wrap -->
+					</div> <!-- /.service-box-wrap -->
+				</div> <!-- /.col-md-4 -->
+
+				<div class="col-md-4 col-sm-4">
+					<div class="service-box-wrap">
+						<div class="service-icon-wrap">
+							<i class="fa fa-pencil-square-o fa-2x"></i>
+						</div> <!-- /.service-icon-wrap -->
+						<div class="service-cnt-wrap">
+							<h3 class="service-title">Graphics Design</h3>
+							<p>The Graphic Designer job description includes the entire process of defining requirements, visualizing and creating graphics including illustrations, logos, layouts and photos. You'll be the one to shape the visual aspects of websites, books, magazines, product packaging, exhibitions and more.</p>
+						</div> <!-- /.service-cnt-wrap -->
+					</div> <!-- /.service-box-wrap -->
+				</div> <!-- /.col-md-4 -->
+
+			</div>
+
+			
+		</div> <!-- /.container -->
+	</section> <!-- /.services -->
+
+	
+
+	<section class="testimonials-widget">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="bxslider">
+						<div class="testimonial">
+							<div class="testimonial-content">
+								<span class="testimonial-author">Dummy - Architect</span>
+								<p class="testimonial-description">Thank you for all your good work in creating theme. They have a ‘presence’ which feels right.</p>
+							</div>
+						</div>
+						<div class="testimonial">
+							<div class="testimonial-content">
+								<span class="testimonial-author">Dummy - Design Writer</span>
+								<p class="testimonial-description">I love the logo. Particularly how the mark can stand on its own. Nice work! It feels tall and proud and powerful — and I love that. That’s what I was after.</p>
+							</div>
+						</div>
+						<div class="testimonial">
+							<div class="testimonial-content">
+								<span class="testimonial-author">Dummy - Developer</span>
+								<p class="testimonial-description">You’re pretty awesome to work with. Incredibly organized, easy to communicate with, responsive with next iterations, and beautiful work.</p>
+							</div>
+						</div>
+					</div> <!-- /.bxslider -->
+				</div> <!-- /.col-md-12 -->
+			</div> <!-- /.row -->
+		</div> <!-- /.container -->
+	</section> <!-- /.testimonials-widget -->
+
+	<section class="light-content our-team" id="jobs">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="section-header">
+						<h2 class="section-title">Recent Jobs </h2>
+						<p class="section-desc">Medigo is the automated way to provide facility for unemployeed people to get job easily</p>
+					</div> <!-- /.section-header -->
+				</div> <!-- /.col-md-12 -->
+			</div> <!-- /.row -->
+		</div> <!-- /.container -->
+		
+		<div class="team-members">
+			<div class="container">
+				<div class="row">
+		
+			
+					{%for i in range(0, jobRecord|length)%} 
+					<div class="col-md-4 col-sm-4">
+						{% set imgName='images/includes/'+jobRecord[i].img%}
+						<div class="team-member">
+							<div class="thumb-post">
+								<img src="{{ url_for('static', filename=imgName) }}" alt="">
+								<span class="member-role">{{jobRecord[i].name_of_job}}</span>
+							</div>
+
+
+							<div>
+								<h4 class="member-name">{{jobRecord[i].company_name}}</h4>
+								<a><i class="fa fa-map-marker" aria-hidden="true" style="font-size: 15px;"></i></a><span>   <b>Location: </b> </span>
+								<span>	{{jobRecord[i].location}}</span>
+								</div><br>
+
+								<div>
+									<table>
+										<thead>
+											<tr>
+									<th style="width: 20%;">
+									<a><i class="fa fa-play-circle-o" aria-hidden="true" style="font-size: 15px;"></i></a><span> Start Date</span>
+										</th>
+										<th style="width: 15%;">
+											<a><i class="fa fa-money" aria-hidden="true" style="font-size: 15px;"></i></a><span> CTC</span>
+												</th>
+												<th style="width: 15%;">
+													<a><i class="fa fa-hourglass-end" aria-hidden="true"  style="font-size: 15px;"></i></a><span> Apply by</span>
+														</th>
+													</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{jobRecord[i].start_date}}</td>
+											<td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{jobRecord[i].CTC}} </td>
+											<td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{jobRecord[i].apply_by}}</td>
+										</tr>
+
+										</tbody>
+									
+									</table>
+									</div><br>
+									
+									<div>
+										<label for="type">{{jobRecord[i].experience}}</label>
+										<a href="/jobDetails/{{jobRecord[i].slug}}/{{jobRecord[i].job_id}}" style="float: right;">Veiw details <i class="fa fa-angle-right fa_custom fa-1.5x"></i></a>
+									</div><br>
+
+						</div> <!-- /.team-member -->
+						
+					</div> <!-- /.col-md-4 -->
+					{%endfor%}
+					</div>
+					</div>
+					</div>
+				 
+					</section>
+			
+				
+	{% endblock %}

@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>admin panel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/styleAdmin.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/all-themes.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+
+  </head>
+  <body class="theme-indigo">
+
+      <!-- Modal -->
+      <div class="modal fade" id="veiwJobModal" role="dialog" >
+        <div class="modal-dialog" style="width: 70%;">
+        
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Veiw Job</h4>
+            </div>
+            <div class="modal-body">
+
+                <form action="/submit-applicant" method="POST" role="form" enctype="multipart/form-data">
+                
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <h4>Records</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="Records">
+                                    <thead style="align-items:center;">
+                                        <tr>
+                                            <th>Company name</th>
+                                            <th>Job stream</th>
+                                            <th>Location</th>
+                                            <th>Start date</th>
+                                            <th>Apply by</th>
+                                            <th>Action</th>
+                                           
+
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+					                        {%for i in range(0, jobRecord|length)%} 
+                                                <tr>
+                                                    <td>
+                                                        {{jobRecord[i].company_name}}
+                                                    </td>
+                                                    <td>
+                                                        {{jobRecord[i].name_of_job}}
+                                                    </td>
+                                                    <td>
+                                                        {{jobRecord[i].location}}
+                                                    </td>
+
+                                                    <td>
+                                                        {{jobRecord[i].start_date}}
+                                                    </td>
+                                                    <td>
+                                                        {{jobRecord[i].apply_by}}
+                                                    </td>
+                                                    <td>
+                                                        <a  onclick="setHref(this.id)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#jobModal" style="margin: 2%; text-decoration: none; border-radius: 4px; padding: 5%;" id="editJob{{jobRecord[i].job_id}}"><span class="fa fa-edit btn-primary" style="margin-top: 6px; font-size: 15px;"> edit&nbsp;&nbsp;&nbsp;</span>  </a>
+
+                                                    </td>
+                                                                                                          
+                                                </tr>
+                                                {%endfor%}
+                                               
+
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                           
+
+                        </div>
+                    </div>
+            </form>
+
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="jobModal" role="dialog">
+        <div class="modal-dialog">
+        
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" onclick="resetElement()">&times;</button>
+            <h4 class="modal-title">{{ "Updating Job" if singlejobRecord|length>0 else "Adding Job" }}</h4>
+            </div>
+            <div class="modal-body">
+
+                <form action="/adminPanel" method="POST" role="form" enctype="multipart/form-data" >
+                    <input type="hidden" class="form-control" name="jobID" id="jobID"  value="{{ singlejobRecord[0].job_id if singlejobRecord|length>0 else '' }}"/>
+
+                <div class="form-group">
+                    <label >Company Name </label>
+                    <input type="text" class="form-control" name="comName" id="comName" placeholder="Company Name" value="{{ singlejobRecord[0].company_name if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >Job Stream </label>
+                    <input type="text" class="form-control" name="nameOfJob" id="nameOfJob" placeholder="Job Stream" value="{{ singlejobRecord[0].name_of_job if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >Job location </label>
+                    <input type="text" class="form-control" name="jobLocate" id="jobLocate" placeholder="location" value="{{ singlejobRecord[0].location if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >Start Date </label>
+                    <input type="text" class="form-control" name="startDate" id="startDate" placeholder="Start Date" value="{{ singlejobRecord[0].start_date if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >CTC</label>
+                    <input type="text" class="form-control" name="CTC" id="CTC" placeholder="Annual Salary" value="{{ singlejobRecord[0].CTC if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >Apply by </label>
+                    <input type="date" class="form-control" name="applyBy" id="applyBy" value="{{ singlejobRecord[0].apply_by if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >Experience</label>
+                    <input type="text" class="form-control" name="exp" id="exp" placeholder="Experience" value="{{ singlejobRecord[0].experience if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >Applicant</label>
+                    <input type="text" class="form-control" name="applicant" id="applicant" placeholder="Applicant" value="{{ singlejobRecord[0].applicant if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >About the job</label>
+                    <textarea class="form-control" id="aboutJob" name="aboutJob" rows="2" cols="50" placeholder="About Job" style="vertical-align: middle;">
+                        {{ singlejobRecord[0].about_the_job if singlejobRecord|length>0 else '' }}
+                       </textarea>
+                </div>
+                <div class="form-group">
+                    <label >Skill required</label>
+                    <input type="text" class="form-control" name="skillReq" id="skillReq" placeholder="skill required" value="{{ singlejobRecord[0].skill_required if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                <div class="form-group">
+                    <label >Who can apply</label>
+                    <textarea id="whoApply" class="form-control" name="whoApply" rows="2" cols="50"  style="vertical-align: middle;">
+                        {{ singlejobRecord[0].who_can_apply if singlejobRecord|length>0 else '' }}
+                    </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label >Number of Opening</label>
+                        <input type="text" class="form-control" name="numOfOpening" id="numOfOpening"  value="{{ singlejobRecord[0].num_of_opening if singlejobRecord|length>0 else '' }}"/>
+                    </div>
+                    <div class="form-group">
+                        <label >Slug Name</label>
+                        <input type="text" class="form-control" name="slugName" id="slugName" placeholder="slug" value="{{ singlejobRecord[0].slug if singlejobRecord|length>0 else '' }}"/>
+                    </div>
+                    <div class="form-group">
+                        <label >Job Status</label>
+                        <select class="form-control" id="jobStatus" name="jobStatus" >
+                            {%  if singlejobRecord|length>0 %}
+                            <option>{{singlejobRecord[0].job_status}}</option>
+
+                            {%endif%}
+                            <option>Select job status--</option>
+                            <option>opend</option>
+                            <option>closed</option>
+                          </select>
+                    </div>
+
+                
+
+                <div class="form-group">
+                    <label>Upload job image </label>
+                    <input type="file" class="form-control" name="jobImage" id="jobImage" placeholder="Contact" value="{{ singlejobRecord[0].img if singlejobRecord|length>0 else '' }}"/>
+                </div>
+                
+    {% if singlejobRecord|length>0 %}
+                <div class="form-group" style="text-align: center;">
+                
+                    <input type="submit" class="btn btn-primary form-control" name="updateJob" id="updateJob" value="Update job" />
+                </div>
+            {%else%}
+            <div class="form-group" style="text-align: center;">
+                
+                <input type="submit" class="btn btn-primary form-control" name="addJob" id="addJob" value="Add job" />
+            </div>
+            {%endif%}
+
+            
+            </form>
+
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="resetElement()">Close</button>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+
+    {% if singlejobRecord|length>0 %}
+    <script>
+     $('#jobModal').modal({backdrop: 'static', keyboard: false})  
+
+    </script>
+    {%endif%}
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Top Bar -->
+    <nav class="navbar" style="position: fixed;">
+
+
+        
+        <div class="container-fluid ">
+            <div class="navbar-header sticy">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand">DASHBOARD</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Call Search -->
+                    <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
+                    <!-- #END# Call Search -->
+
+
+
+                    <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <section >
+       
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar" >
+             <!-- User Info -->
+             <div class="user-info">
+                <div class="image">
+                    <img src="/static/images/user.png" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown-menu" aria-haspopup="true" aria-expanded="false">
+                        {{adminSession}}
+                          </div>
+                    <div class="email"></div>
+                    <div class="btn-group user-helper-dropdown">
+        
+                        <i class="material-icons" data-toggle="dropdown-menu" aria-haspopup="true" aria-expanded="true" id="btnArrow" onclick="blockNone()">keyboard_arrow_down</i>
+    
+                        <ul id="collaps" class="dropdown-menu pull-right" style="margin-right: 100%;">
+                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/adminSignOut"><i class="material-icons">input</i>Sign Out</a></li>
+                        </ul>
+                       
+                   
+                    </div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu"  >
+                <ul class="list"  >
+                    <li class="header" >MAIN NAVIGATION</li>
+                    <li class="active">
+                        <a href="/adminPanel">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+             
+                    <li >
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">badge</i>
+                            <span>Job</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="#" data-toggle="modal" data-target="#jobModal">Add Job</a>
+                            </li>
+                            <li>
+                                <a href="#" data-toggle="modal" data-target="#veiwJobModal">Veiw Job</a>
+                            </li>
+                           
+                        </ul>
+                    </li>
+                    
+                    
+
+
+                    <li >
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">book</i>
+                            <span>Applicant Stages</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="/Stage/0">Resume Verification</a>
+                            </li>
+                            <li>
+                                <a href="/Stage/1">Stage I</a>
+                            </li>
+                            <li>
+                                <a href="/Stage/2">Stage II</a>
+                            </li>
+                            <li>
+                                <a href="/Stage/3">HR Round/Final Round</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    
+
+                    <li class="header">Features</li>
+                   
+                    <li>
+                        <a href="javascript:void(0);">
+                            <i class="material-icons col-amber">donut_large</i>
+                            <span>Comming Soon!!!</span>
+                        </a>
+                    </li>
+                   
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <div class="legal">
+                <div class="copyright">
+                    &copy; 2020 - 2021 <a href="javascript:void(0);">Designed</a>.
+                </div>
+                <div class="version">
+                    <b>Version: </b> 1.0
+                </div>
+            </div>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+      
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <span style="font-size: 25px; font-weight: bold;">DASHBOARD: Admin Panel</span>
+            </div>
+
+
+
+            <!-- Main Form For Personal Details -->
+            <div id="tableContent">
+                <div class="row clearfix">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                        <div class="card">
+                            <div class="header">
+                                <div class="row clearfix">
+
+                                    <div class="col-xs-12 col-sm-6">
+                                        <h4>Current Status:{{ "Applicant Overview" if applicantRecord|length>0 else ""}}{%if stageAppliRecord|length>0%} {{  "Resume Verification" if stageAppliRecord[0].applicant_state=="0" else "Stage I" if stageAppliRecord[0].applicant_state=="1" else "Stage II" if stageAppliRecord[0].applicant_state=="2" else "HR Round/FinalRound" if stageAppliRecord[0].applicant_state=="3" else "" }}{%endif%}
+                                        </h4>                                    
+                                        </div>
+
+                                </div>
+                            </div>
+                            
+                            <br>
+                           
+
+                            <!-- Advanced Tables -->
+
+                            <div class="panel panel-default">
+
+                                <div class="panel-heading">
+                                    <h4>Records</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered table-hover" id="Records">
+                                            <thead style="align-items:center;">
+                                                <tr>
+                                                    <th>Applicant name</th>
+                                                    <th>Contact</th>
+                                                    <th>Company name</th>
+                                                    <th>Job stream</th>
+                                                    <th>Location</th>
+                                                    <th>Experience</th>
+                                                    <th>Stage current status</th>
+                                                    {% if stageAppliRecord|length>0%}
+                                                    <th>Resume</th>
+                                                    <th>Action</th>
+
+                                                    {%else%}
+                                                    
+                                                    <th>Applicant Stage</th>
+                                                    {%endif%}
+                                                   
+
+                                               </tr>
+                                            </thead>
+                                            <tbody>
+                                                {%set count=applicantRecord|length if applicantRecord|length>0 else  stageAppliRecord|length %}
+                                                {%for i in range(0,count)%}         
+                                                <tr>
+                                                            <td>
+                                                                {{applicantRecord[i].name if applicantRecord|length>0 else stageAppliRecord[i].name }}
+                                                            </td>
+                                                            <td>
+                                                                {{applicantRecord[i].contact if applicantRecord|length>0 else stageAppliRecord[i].contact}}
+                                                            </td>
+                                                            <td>
+                                                                {{selectedjobRecord[i][0].company_name if applicantRecord|length>0 else stageSelectedjobRecord[i][0].company_name}}
+                                                            </td>
+
+                                                            <td>
+                                                                {{selectedjobRecord[i][0].name_of_job if applicantRecord|length>0 else stageSelectedjobRecord[i][0].name_of_job}}
+                                                            </td>
+                                                            <td>
+                                                                {{selectedjobRecord[i][0].location if applicantRecord|length>0 else stageSelectedjobRecord[i][0].location}}
+                                                            </td>
+                                                            <td>
+                                                                {{selectedjobRecord[i][0].experience if applicantRecord|length>0 else stageSelectedjobRecord[i][0].experience}}
+                                                            </td>
+                                                            <td>
+                                                               {%if applicantRecord|length>0%} 
+                                                               {{"Rejected" if applicantRecord[i].transfer_status=="-1" else "Approved" if applicantRecord[i].transfer_status=="-2" else "Pending" if applicantRecord[i].transfer_status=="-3" else "34"}}
+                                                                {%else%}
+                                                                {{"Rejected" if stageAppliRecord[i].transfer_status=="-1" else "Approved" if stageAppliRecord[i].transfer_status=="-2" else "Pending" if stageAppliRecord[i].transfer_status=="-3" else "33"}}
+
+                                                                {%endif%}
+
+                                                            </td>
+                                                            {% if stageAppliRecord|length>0%}
+                                                            <td>
+                                                                <a class="btn btn-info btn-xs" style="margin: 4%; text-decoration: none; border-radius: 4px; padding: 5%;" target="_blank" href="/action/veiw/{{stageAppliRecord[i].s_no}}"><span class="fa fa-eye btn-info" style="margin-top: 6px; font-size: 15px;"> View&nbsp;&nbsp;</span>  </a>
+
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-success btn-xs" style=" text-decoration: none; border-radius: 4px; padding: 5%;"  href="/action/approve/{{stageAppliRecord[i].s_no}}"><span class="fa fa-check-square-o btn-success " style="margin-top: 2px; font-size: 15px;">Approve&nbsp;</span></a>
+                                                                <a class="btn btn-danger btn-xs" style="margin: 2%; text-decoration: none; border-radius: 4px; padding: 5%;" href="/action/reject/{{stageAppliRecord[i].s_no}}"><span class="fa fa-times-circle btn-danger" style="margin-top: 2px; font-size: 15px;"> Reject&nbsp;&nbsp;&nbsp;</span></a>
+
+                                                            </td>
+                                                            {%else%}
+                                                            <td>
+                                                                {{"Resume Verification" if applicantRecord[i].applicant_state=="0" else "Stage I" if applicantRecord[i].applicant_state=="1" else "Stage II" if applicantRecord[i].applicant_state=="2" else "HR Round/FinalRound" if applicantRecord[i].applicant_state=="3" else ""}}
+                                                            </td>
+                                                            {%endif%}                                               
+                                                        </tr>
+                                                        {%endfor%}
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                   
+
+                                </div>
+                            </div>
+                            </form>
+                           
+
+                                    <div class="body">
+                                        <div id="real_time_chart" class="dashboard-flot-chart"></div>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         
+        </div>
+        </div>
+                   
+ 
+<script>
+function blockNone(){
+  if(document.getElementById("collaps").style.display=="block"){
+     document.getElementById("collaps").style.display='none';
+     document.getElementById("btnArrow").innerText="keyboard_arrow_down";
+
+  }else{
+      document.getElementById("collaps").style.display='block';
+      document.getElementById("btnArrow").innerText="keyboard_arrow_up"
+  }
+     }
+
+     function setHref(id)
+     {
+         window.location.href="/adminPanel/edit/"+id.substr(7);
+     }
+
+     function resetElement()
+     {
+         window.location="/adminPanel";
+     }
+     </script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+  </body>
+</html>
